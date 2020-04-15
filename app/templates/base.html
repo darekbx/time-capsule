@@ -1,0 +1,33 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    Time Capsule
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default">
+
+		<div class="navbar-inner">
+			{% if current_user.is_authenticated %}
+			<ul class="nav  pull-right" >
+				<li><a href="/logout">Logout</a></li>
+			</ul>
+			{% endif %}
+		</div>
+
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}

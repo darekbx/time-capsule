@@ -1,0 +1,6 @@
+Flask
+Flask-WTF
+Flask-Bootstrap
+Flask-Login
+WTForms
+Py-dateutil
