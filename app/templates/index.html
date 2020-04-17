@@ -1,6 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
 
-Index
+<table class="table">
+<tbody>	
+
+{% for row in content %}
+<tr>
+	{% if row['is_dir'] %}
+		<td width="1%"><img src="/static/icon_dir.png" width="20" height="20" /></td>
+		<td><a href="/dir/{{ row['path'] }}">{{row['name']}}</a></td>
+		<td width="10%"></td>
+		<td width="10%">{{row['date']}}</td>
+	{% else %}
+		<td width="1%"><img src="/static/icon_file.png" width="20" height="20" /></td>
+		<td>{{row['name']}}</td>
+		<td width="10%">{{row['size']}}</td>
+		<td width="10%">{{row['date']}}</td>
+	{% endif %}
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
 
 {% endblock %}
