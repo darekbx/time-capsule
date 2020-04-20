@@ -1,5 +1,36 @@
 {% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<style>
+	#browsebutton {
+		background-color: white;
+	}
+	
+	#my-file-selector {
+		display: none;
+	}
+</style>
+{% endblock %}
+
 {% block content %}
+{{super()}}
+
+<div style="padding: 10px;">
+	<form class="form-inline center-block" action="/upload" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="dir" value="{{ dir }}" />
+		<input type="hidden" name="url" value="{{ request.path }}" />
+		{{ upload_form.hidden_tag() }}
+        <div class="input-group">
+            <label id="browsebutton" class="btn btn-default input-group-addon" for="my-file-selector">
+                {{ upload_form.file(id="my-file-selector") }}
+                Browse...
+            </label>
+            <input type="text" class="form-control" readonly>
+        </div>
+        {{ upload_form.submit(class_="btn btn-primary") }}
+    </form>
+</div>
 
 <table class="table">
 <tbody>	
@@ -9,18 +40,36 @@
 	{% if row['is_dir'] %}
 		<td width="1%"><img src="/static/icon_dir.png" width="20" height="20" /></td>
 		<td><a href="/dir/{{ row['path'] }}">{{row['name']}}</a></td>
-		<td width="10%"></td>
+		<td width="20%"></td>
+		<td width="1%"></td>
 		<td width="10%">{{row['date']}}</td>
 	{% else %}
 		<td width="1%"><img src="/static/icon_file.png" width="20" height="20" /></td>
 		<td>{{row['name']}}</td>
-		<td width="10%">{{row['size']}}</td>
+		<td width="20%">
+			<a href="{{ url_for('open', dir=row['path']) }}">Open</a>&nbsp;|&nbsp;
+			<a href="{{ url_for('download', dir=row['path']) }}">Download</a>&nbsp;|&nbsp;
+			<a href="{{ url_for('delete', dir=row['path']) }}">Delete</a>
+		</td>	
+		<td width="1%">{{row['size']}}</td>
 		<td width="10%">{{row['date']}}</td>
 	{% endif %}
 </tr>
 {% endfor %}
 
 </tbody>
+<tfoot>
+	<td width="1%"></td>
+	<td></td>
+	<td width="10%"></td>
+	<td width="10%"><b>&#931; {{dir_size}}</b></td>
+	<td width="10%"></td>
+</tfoot>
 </table>
 
+{% endblock %}	
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/inputFileButton.js') }}" ></script>
 {% endblock %}

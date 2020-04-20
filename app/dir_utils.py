@@ -10,7 +10,7 @@ class DirUtils:
 
 		if not is_root:
 			head, tail = os.path.split(relative_dir)
-			output.append({ "name": "[..]", "path": head, "is_dir": True })
+			output.append({ "name": "[..]", "path": head, "date": "_", "is_dir": True })
 
 		for file_name in files_in_directory:
 			path = absolute_dir + "/" + file_name
@@ -26,7 +26,8 @@ class DirUtils:
 				"is_dir": is_dir
 			})
 
-		return sorted(output, key=lambda item: item['is_dir'], reverse=True)
+
+		return sorted(output, key=lambda item: (item['is_dir'], item['date']), reverse=True)
 
 	def file_date_time(self, file_date):
 		return parse(str(time.ctime(file_date)))
@@ -43,3 +44,12 @@ class DirUtils:
 				return "%3.1f%s%s" % (num, unit, suffix)
 			num /= 1024.0
 		return "%.1f%s%s" % (num, 'Yi', suffix)
+
+	def dir_size(self, dir_path):
+		total_size = 0
+		for dirpath, dirnames, filenames in os.walk(dir_path):
+			for f in filenames:
+				fp = os.path.join(dirpath, f)
+				if not os.path.islink(fp):
+					total_size += os.path.getsize(fp)
+		return total_size

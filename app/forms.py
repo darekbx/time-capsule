@@ -1,8 +1,14 @@
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, SubmitField
+from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired, Length
 
 from app import app
+
+class UploadForm(FlaskForm):
+    validators = [FileRequired(message='No selected file')]
+    file = FileField('', validators=validators)
+    submit = SubmitField(label="Upload")
 
 class LoginForm(FlaskForm):
 	pin = PasswordField('Pin', validators = [
