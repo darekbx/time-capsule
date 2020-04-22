@@ -2,6 +2,7 @@
 
 {% block head %}
 {{ super() }}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" />
 <style>
 	#browsebutton {
 		background-color: white;
@@ -30,6 +31,14 @@
         </div>
         {{ upload_form.submit(class_="btn btn-primary") }}
     </form>
+
+	<button id="create-dir" style="margin-top: 10px;">Create directory</button>
+	<div id="dialog-create-dir" title="Create new directory">
+		<form action="dir/" method="POST">
+			<input type="text" name="dir-name" id="dir-name" value="" class="text ui-widget-content ui-corner-all">
+			<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+		</form>
+	</div>
 </div>
 
 <table class="table">
@@ -71,5 +80,6 @@
 
 {% block scripts %}
 {{ super() }}
-<script src="{{ url_for('static', filename='js/inputFileButton.js') }}" ></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<script src="{{ url_for('static', filename='js/scripts.js') }}" ></script>
 {% endblock %}

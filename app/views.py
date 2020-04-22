@@ -27,6 +27,15 @@ def download(dir):
 	absolute_dir = app.config["RESOURCES-DIRECTORY"] + "/" + dir
 	return send_file(absolute_dir, as_attachment=True)
 
+@app.route('/new-dir', methods=['GET', 'POST'])
+def new_dir(name = ""):
+	if request.method == 'POST':
+		dir = request.form['dir'].replace("dir/", "")
+		absolute_dir = app.config["RESOURCES-DIRECTORY"] + dir
+		DirUtils().make_dir(absolute_dir, request.form['name'])
+		return redirect(url_for('new_dir'))
+	return redirect("/")
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
 	if request.method == 'POST':

@@ -26,7 +26,6 @@ class DirUtils:
 				"is_dir": is_dir
 			})
 
-
 		return sorted(output, key=lambda item: (item['is_dir'], item['date']), reverse=True)
 
 	def file_date_time(self, file_date):
@@ -37,6 +36,14 @@ class DirUtils:
 
 	def file_date(self, path):
 		return os.path.getmtime(path)
+
+	def make_dir(self, path, name):
+		new_dir = os.path.join(path, name)
+		if os.path.exists(new_dir):
+			sufix = int(time.time())
+			os.mkdir("{0}_{1}".format(new_dir, sufix))
+		else:
+			os.mkdir(new_dir)
 
 	def sizeof_fmt(self, num, suffix='B'):
 		for unit in ['','K','M','G','T','P','E','Z']:
