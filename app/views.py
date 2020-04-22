@@ -48,13 +48,7 @@ def upload_file():
 		dir = request.form['dir']
 		request_dir = request.form['url']
 		request_dir = request_dir.replace("/dir", "")
-
-		file_to_save = os.path.join(dir, file.filename)
-		
-		if os.path.exists(file_to_save):
-			name, extension = os.path.splitext(file.filename)
-			sufix = int(time.time())
-			file_to_save = os.path.join(dir, "{0}_{1}{2}".format(name, sufix, extension))
+		file_to_save = DirUtils().obtain_file_to_save(dir, file.filename)
 		
 		file.save(file_to_save)
 		return redirect(url_for("index", dir=request_dir))

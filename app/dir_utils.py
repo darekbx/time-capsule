@@ -37,6 +37,14 @@ class DirUtils:
 	def file_date(self, path):
 		return os.path.getmtime(path)
 
+	def obtain_file_to_save(self, path, filename):
+		file_to_save = os.path.join(path, filename)
+		if os.path.exists(file_to_save):
+			name, extension = os.path.splitext(filename)
+			sufix = int(time.time())
+			file_to_save = os.path.join(path, "{0}_{1}{2}".format(name, sufix, extension))
+		return file_to_save
+
 	def make_dir(self, path, name):
 		new_dir = os.path.join(path, name)
 		if os.path.exists(new_dir):
