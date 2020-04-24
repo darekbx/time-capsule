@@ -21,14 +21,13 @@ $(document).ready(function () {
 $(function () {
     var dirName = $("#dir-name");
     var form;
+
     var dialog = $("#dialog-create-dir").dialog({
         autoOpen: false,
         height: 156,
         width: 240,
         modal: true,
-        buttons: {
-            "Create": addDir,
-        },
+        buttons: { "Create": addDir, },
         close: function () {
             form[0].reset();
             dirName.removeClass("ui-state-error");
@@ -40,13 +39,8 @@ $(function () {
         dirName.removeClass("ui-state-error");
         if (valid) {
             $.post("/new-dir", { "name": dirName.val(), "dir": window.location.pathname })
-                .done(function () {
-                    // Reload
-                    window.location.replace(window.location.href);
-                })
-                .fail(function () {
-                    alert("An error occurred during creating new directory.");
-                });
+                .done(function () { window.location.replace(window.location.href); })
+                .fail(function () { alert("An error occurred during creating new directory."); });
             dialog.dialog("close");
         } else {
             dirName.addClass("ui-state-error");
@@ -61,5 +55,26 @@ $(function () {
 
     $("#create-dir").button().on("click", function () {
         dialog.dialog("open");
+    });
+
+    $(".row-delete-item").on("click", function () {
+        var path = $(this).data('path');
+        var name = $(this).data('name')
+        var dialog = $("<div>Delete '" + name + "'?</div>");
+        $( dialog ).dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+              "Delete": function() {
+                $.post("/delete", { "path": path })
+                .done(function () { window.location.replace(window.location.href); })
+                .fail(function () { alert("An error occurred during deleting file."); });
+              },
+              Cancel: function() { $( this ).dialog( "close" ); }
+            }
+          });
+          dialog.dialog("open");
     });
 });

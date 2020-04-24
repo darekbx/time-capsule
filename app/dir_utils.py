@@ -45,6 +45,9 @@ class DirUtils:
 			file_to_save = os.path.join(path, "{0}_{1}{2}".format(name, sufix, extension))
 		return file_to_save
 
+	def delete_file(self, path):
+		os.remove(path)
+
 	def make_dir(self, path, name):
 		new_dir = os.path.join(path, name)
 		if os.path.exists(new_dir):

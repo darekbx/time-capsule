@@ -17,9 +17,11 @@ def open(dir):
 	flash("TODO")
 	return redirect("/")
 
-@app.route('/delete/<dir>')
-def delete(dir):
-	flash("TODO")
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+	if request.method == 'POST':
+		path = app.config["RESOURCES-DIRECTORY"] + "/" + request.form['path']
+		DirUtils().delete_file(path)
 	return redirect("/")
 
 @app.route('/download/<dir>')
@@ -28,7 +30,7 @@ def download(dir):
 	return send_file(absolute_dir, as_attachment=True)
 
 @app.route('/new-dir', methods=['GET', 'POST'])
-def new_dir(name = ""):
+def new_dir():
 	if request.method == 'POST':
 		dir = request.form['dir'].replace("dir/", "")
 		absolute_dir = app.config["RESOURCES-DIRECTORY"] + dir

@@ -58,7 +58,7 @@
 		<td width="20%">
 			<a href="{{ url_for('open', dir=row['path']) }}">Open</a>&nbsp;|&nbsp;
 			<a href="{{ url_for('download', dir=row['path']) }}">Download</a>&nbsp;|&nbsp;
-			<a href="{{ url_for('delete', dir=row['path']) }}">Delete</a>
+			<span class="row-delete-item" style="text-decoration: underline;" data-path="{{ row['path'] }}" data-name="{{ row['name'] }}">Delete</span>
 		</td>	
 		<td width="1%">{{row['size']}}</td>
 		<td width="10%">{{row['date']}}</td>
