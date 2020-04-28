@@ -17,6 +17,12 @@ def open(dir):
 	flash("TODO")
 	return redirect("/")
 
+@app.route('/backup', methods=['GET', 'POST'])
+def backup():
+	if request.method == 'POST':
+		return DirUtils().make_backup(app.config["RESOURCES-DIRECTORY"])
+	return redirect("/")
+
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
 	if request.method == 'POST':

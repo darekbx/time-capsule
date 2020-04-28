@@ -53,6 +53,14 @@ $(function () {
         addUser();
     });
 
+    $("#make-backup").button().on("click", function () {
+        $.post("/backup", function( data ) {
+            alert( "Backup created to: " + data );
+          })
+            .done(function () { window.location.replace(window.location.href); })
+            .fail(function () { alert("An error occurred during creating new directory."); });
+    });
+
     $("#create-dir").button().on("click", function () {
         dialog.dialog("open");
     });

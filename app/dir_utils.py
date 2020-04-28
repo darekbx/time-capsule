@@ -1,9 +1,28 @@
 import os
+import zipfile
 import time, datetime as dt
 from dateutil.parser import parse
 
 class DirUtils:
 	
+	def make_backup(self, main_path):
+		backups = "_backups"
+		backup_dir = os.path.join(main_path, backups)
+		backup_time = time.strftime("%Y_%m_%d_%H_%M")
+
+		if not os.path.exists(backup_dir):
+			os.makedirs(backup_dir)
+		
+		out_file = backup_dir + "/" + 'backup_{0}.zip'.format(backup_time)
+		zipf = zipfile.ZipFile(out_file, 'w', zipfile.ZIP_DEFLATED)
+		for root, dirs, files in os.walk(main_path):
+			for file in files:
+				if os.path.basename(os.path.normpath(root)) == backups:
+					continue
+				zipf.write(os.path.join(root, file))
+		zipf.close()
+		return out_file
+
 	def fetch_content(self, absolute_dir, relative_dir, is_root):
 		files_in_directory = os.listdir(absolute_dir)
 		output = []
