@@ -5,6 +5,27 @@ from dateutil.parser import parse
 
 class DirUtils:
 	
+	FILE_PREVIEW_LIMIT = 1024 * 1024 # 1MB
+
+	def is_image(self, path):
+		return path.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif', '.svg'))
+
+	def is_SQLite3(self, path):
+		if not os.path.isfile(path):
+			return False
+		if self.file_size(path) < 100:
+			return False
+
+		with open(path, 'rb') as fd:
+			header = fd.read(100)
+		return header[:16].decode() == 'SQLite format 3\x00'
+
+	def read_file_contents(self, path):
+		if self.file_size(path) > self.FILE_PREVIEW_LIMIT:
+			return None, "File is too big to open"
+		with open(path, "rb") as handle:
+			return handle.read(), None
+
 	def make_backup(self, main_path):
 		backups = "_backups"
 		backup_dir = os.path.join(main_path, backups)
@@ -15,11 +36,13 @@ class DirUtils:
 		
 		out_file = backup_dir + "/" + 'backup_{0}.zip'.format(backup_time)
 		zipf = zipfile.ZipFile(out_file, 'w', zipfile.ZIP_DEFLATED)
+
 		for root, dirs, files in os.walk(main_path):
 			for file in files:
 				if os.path.basename(os.path.normpath(root)) == backups:
 					continue
 				zipf.write(os.path.join(root, file))
+
 		zipf.close()
 		return out_file
 

@@ -1,7 +1,7 @@
 from app import app
 from app.forms import LoginForm, UploadForm
 from app import models, login_manager
-from flask import g, request, url_for, send_file, render_template, redirect, flash
+from flask import g, request, url_for, send_file, render_template, redirect, flash, abort
 from flask_login import current_user, login_user, logout_user, login_required
 from dateutil.parser import parse
 
@@ -9,12 +9,27 @@ from app.dir_utils import DirUtils
 
 import time, datetime as dt
 import os
-from os.path import expanduser
+import json
 import hashlib
 
-@app.route('/open/<dir>')
-def open(dir):
-	flash("TODO")
+@app.route('/open', methods=['GET', 'POST'])
+def open():
+	if request.method == 'POST':
+		dirUtils = DirUtils()
+		path = app.config["RESOURCES-DIRECTORY"] + "/" + request.form['path']
+
+		if dirUtils.is_SQLite3(path):
+			return json.dumps({"type":"sqlite"})
+
+		if dirUtils.is_image(path):
+			return json.dumps({"type":"image","path":"file:///" + path})
+
+		contents, error = DirUtils().read_file_contents(path)
+		if contents is None:
+			return error, 400
+		else:
+			return json.dumps({"type":"text", "content":contents.decode()})
+		
 	return redirect("/")
 
 @app.route('/backup', methods=['GET', 'POST'])
@@ -30,7 +45,7 @@ def delete():
 		DirUtils().delete_file(path)
 	return redirect("/")
 
-@app.route('/download/<dir>')
+@app.route('/download/<path:dir>')
 def download(dir):
 	absolute_dir = app.config["RESOURCES-DIRECTORY"] + "/" + dir
 	return send_file(absolute_dir, as_attachment=True)

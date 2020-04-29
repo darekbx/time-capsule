@@ -40,8 +40,11 @@
 		</form>
 	</div>
 
-
 	<button id="make-backup" style="margin-top: 10px;">Make backup</button>
+	<div id="make-backup-dialog" title="Backup">
+		<div class="progress-label">Creating backup...</div>
+		<div id="make-backup-progressbar"></div>
+	  </div>
 </div>
 
 <table class="table">
@@ -59,9 +62,9 @@
 		<td width="1%"><img src="/static/icon_file.png" width="20" height="20" /></td>
 		<td>{{row['name']}}</td>
 		<td width="20%">
-			<a href="{{ url_for('open', dir=row['path']) }}">Open</a>&nbsp;|&nbsp;
+			<a class="row-open-item" style="cursor: pointer;" data-path="{{ row['path'] }}" data-name="{{ row['name'] }}">Open</a>&nbsp;|&nbsp;	
 			<a href="{{ url_for('download', dir=row['path']) }}">Download</a>&nbsp;|&nbsp;
-			<span class="row-delete-item" style="text-decoration: underline;" data-path="{{ row['path'] }}" data-name="{{ row['name'] }}">Delete</span>
+			<a class="row-delete-item" style="cursor: pointer;" data-path="{{ row['path'] }}" data-name="{{ row['name'] }}">Delete</a>
 		</td>	
 		<td width="1%">{{row['size']}}</td>
 		<td width="10%">{{row['date']}}</td>
