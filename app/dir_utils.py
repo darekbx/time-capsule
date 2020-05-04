@@ -1,5 +1,6 @@
 import os
 import zipfile
+import urllib.parse
 import time, datetime as dt
 from dateutil.parser import parse
 
@@ -62,7 +63,7 @@ class DirUtils:
 			is_dir = os.path.isdir(path)
 			output.append({
 				"name": "{0}".format(file_name) if is_dir else file_name,
-				"path": relative_dir + "/" + file_name,
+				"path": urllib.parse.quote(relative_dir + "/" + file_name),
 				"size": self.sizeof_fmt(file_size),
 				"date": file_date_time.strftime('%Y-%m-%d %H:%M:%S'),
 				"is_dir": is_dir

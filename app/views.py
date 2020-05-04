@@ -11,6 +11,7 @@ import time, datetime as dt
 import os
 import json
 import hashlib
+import urllib.parse
 
 @app.route('/open', methods=['GET', 'POST'])
 def open():
@@ -82,6 +83,7 @@ def upload_file():
 @app.route('/dir/<path:dir>')
 @login_required
 def index(dir = ""):
+	dir = urllib.parse.unquote(dir)
 	dir_utils = DirUtils()
 	absolute_dir = app.config["RESOURCES-DIRECTORY"] + "/" + dir
 	content = dir_utils.fetch_content(absolute_dir, dir, dir is "")
